@@ -1,0 +1,173 @@
+$primary-color         = #F44336
+$dark-primary-color    = #D32F2F
+$light-primary-color   = #FFCDD2
+$text-primary-color    = #FFFFFF
+$accent-color          = #8BC34A
+$primary-text-color    = #212121
+$secundary-text-color  = #727272
+$divider-color         = #B6B6B6
+
+.primary-color    
+	 background $primary-color
+.dark-primary-color    
+	 background $dark-primary-color
+.light-primary-color      
+	 background $light-primary-color
+.text-primary-color       
+	 color $text-primary-color
+.accent-color             
+	 background $accent-color
+.primary-text-color       
+	 color $primary-text-color
+.secundary-text-color     
+	 color $secundary-text-color
+.divider-color            
+	 background $divider-color	
+a
+	color $accent-color
+.btn, .btn-large
+	background-color $accent-color
+	&:hover
+		background-color $accent-color
+	&:focus
+		background-color $accent-color
+select
+	&.material
+		background-color transparent
+		border none
+		border-bottom 1px solid #333
+		height 40px
+		&.ng-valid-parse
+			border-bottom 2px solid $accent-color
+			
+	
+.dropdown-content 
+	li 
+		a
+			color $accent-color
+		span
+			color $accent-color
+.picker__
+	&date-display
+		background-color $accent-color
+		.picker__weekday-display
+			background-color darken($accent-color , 15)			
+	&day--selected, &day--selected:hover, .picker--focused &day--selected
+		background-color $accent-color
+	&close, &today
+		color $accent-color
+	&nav--prev, &nav--next
+		&:hover
+			background-color $accent-color
+			
+.input-field .prefix.active
+	color $accent-color	
+
+#sale-form , #form-add-client
+	label
+		color $primary-text-color !important	
+	input:focus
+		border-bottom 1px solid $primary-text-color !important
+		box-shadow 0 1px 0 0 $primary-text-color !important
+#sidenav-overlay 
+	@media screen and (min-width 992px)
+		display none
+nav
+	background none
+
+.content
+	padding-top 2em !important
+
+.app-wrapper
+	@media screen and (min-width 992px)
+		padding-top 100px
+	&::before
+		@media screen and (min-width 992px)
+			position absolute
+			z-index 1
+			background-color $primary-color
+			width 100%
+			height 139px
+			content ''
+			-webkit-animation bar-slide .2s cubic-bezier(.1,.82,.25,1)
+			animation bar-slide .2s cubic-bezier(.1,.82,.25,1)
+			top 0
+			left 0	
+.wrapper
+	width 100%
+	height 100%
+	z-index 2
+	@media screen and (min-width 992px)
+		position relative
+.resume
+	border-left 2px solid $divider-color
+	
+#modal-login
+	width 40%
+.modal
+	min-width 405px
+	min-height 700px
+	height auto
+.form-modal
+	button
+		margin-right 15px !important
+		margin-bottom 15px !important
+.lock-background
+	background $primary-color
+	position fixed
+	width 100%
+	height 100%
+	z-index 10
+	top 0
+	left 0
+	color $secundary-text-color
+	.valign-wrapper
+		height 100%	
+		.img-user
+			z-index 10
+			position relative
+			min-width 80px
+		.lock
+			background-image url(../images/back-opacity.png)
+			margin-top -20px
+			padding-top 20px
+			z-index 9
+			height 200px
+			color #FFFFFF
+			#unlock-screen
+				label
+					color #FFFFFF
+				input
+					border-bottom: 1px solid #FFFFFF;
+				button
+					background-color $accent-color
+.toast
+	text-transform uppercase
+	font-weight bold
+	text-overflow ellipsis
+	overflow hidden	
+	white-space nowrap
+	&-error
+		color $dark-primary-color;
+	&-success
+		color $accent-color;
+.modal-trigger
+	font-size 2rem
+.table-products
+	tr
+		&.not_available
+			background-color $light-primary-color !important
+		@media screen and (min-width 992px)
+			height 60px
+		td
+			font-size 14px
+			&.not_available
+				i
+					color $dark-primary-color
+					font-size 32px
+			a
+				font-size 32px
+				color $accent-color
+		
+
+	

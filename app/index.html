@@ -1,0 +1,551 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>pos</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/materialize/bin/materialize.css" />
+    <link rel="stylesheet" href="bower_components/normalize-css/normalize.css" />
+    <link rel="stylesheet" href="bower_components/angucomplete-alt/angucomplete-alt.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/angucomplete.css">
+    <!-- endbuild -->
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+
+  </head>
+  <body ng-app="pos">
+    <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="app-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="wrapper">  
+            <header ng-controller="headerController">
+              <nav class="dark-primary-color col l12">
+                  <a href="http;//vitemmuebles.com" target="_blank" class="brand-logo">VITEM</a>         
+                  <ul class="right hide-on-med-and-down">
+
+                    <li><a href="#modal-add-delivery" class="modal-trigger" ><i class="small mdi-maps-local-shipping"></i></a></li>
+                    <li><a href="#modal-login" class="modal-trigger" ><i class="small mdi-action-autorenew"></i></a></li>
+                    <li><a href="#!" ng-click="lockScreen();"><i class="small mdi-action-lock-outline"></i></a></li>
+                    <li><a href="#!"><i class="small mdi-action-settings-power"></i></a></li>
+                  </ul>                  
+                  <ul id="slide-out" class="side-nav hide-on-large-only">
+                    <li><a href="#modal-add-delivery" class="modal-trigger" ><i class="small mdi-maps-local-shipping"></i></a></li>
+                    <li><a href="#modal-login" class="modal-trigger" ><i class="small mdi-action-autorenew"></i></a></li>
+                    <li><a href="#!" ng-click="lockScreen();"><i class="small mdi-action-lock-outline"></i></a></li>
+                    <li><a href="#!"><i class="small mdi-action-settings-power"></i></a></li>
+                  </ul>
+                  <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+              </nav>
+
+              <div class="lock-background" ng-if="lock"> 
+                <div class="row valign-wrapper">
+                    <div class="col s8 offset-s2 m6 offset-m3 l4 offset-l4 center-align">
+                      <h3>19:45:23</h3>     
+                      <img src="images/user.jpg" alt="" class="circle col s2 offset-s5 img-user" />
+                      <div class="col s10 offset-s1 l8 offset-l2 lock">
+                        <h4>Iram Gutiérrez</h4>
+                        <form action="" id="unlock-screen" class="col s12">                          
+                          <input-field class="col s8 m8 l10">
+                              <input type="password" ng-model="login.username">
+                              <label>Contraseña</label>
+                          </input-field>  
+                          <input-field class="col s4 m4 l2">
+                            <button class="btn-floating btn-large waves-effect waves-light accent-color" ng-click="unLockScreen();">
+                              <i class="mdi-content-send"></i>
+                            </button>
+                          </input-field>                        
+                        </form>
+                      </div>     
+                    </div>
+                </div>
+              </div>
+
+            </header> 
+            <section class="content col s12">  
+              <section class="col l8 m12 s12" ng-controller="formController">                
+                <form action="#" class="" id="sale-form">
+                  <div class="input-field col l6 offset-l6 m6 offset-m6 s12">
+                    <div class="col l10 m10 s11">
+                      <i class="mdi-hardware-keyboard-control prefix"></i>
+                      <input type="text" ng-model="sheet" disabled>
+                      <label for="icon_prefix">Folio</label>
+                    </div>
+                  </div>
+                  <div class="input-field col l6 offset-l6 m6 offset-m6 s12">
+                    <div class="col l10 m10 s11">
+                      <i class="mdi-action-today prefix"></i>
+                      <label for="inputCreated">Fecha de venta</label>
+                      <input input-date
+                          type="text"
+                          name="created"
+                          id="inputCreated"
+                          ng-model="currentTime"
+                          format="dd/mm/yyyy"
+                          months-full="{{ month }}"
+                          months-short="{{ monthShort }}"
+                          weekdays-full="{{ weekdaysFull }}"
+                          weekdays-short="{{ weekdaysShort }}"
+                          weekdays-letter="{{ weekdaysLetter }}"
+                          today="today"
+                          clear="clear"
+                          close="close"
+                          on-start="onStart()"
+                          on-render="onRender()"
+                          on-open="onOpen()"
+                          on-close="onClose()"
+                          on-set="onSet()"
+                          on-stop="onStop()"
+                          close-on-select = "true"
+                          close-on-clear = "true" />
+                    </div>
+                  </div>        
+                  <div class="col s11">
+                  <div class="col m5 offset-m1 s12"> 
+                      <label for="pay_type">Forma de pago</label>                  
+                      <select id="pay_type" class="browser-default material" ng-model="pay_tpe">
+                    
+                          <option ng-repeat="type in pay_types" value="{{type.id}}">{{type.name}}</option>
+                      </select>
+                  </div>                 
+                  <div class="col m5  offset-m1 s12">
+                      <label for="sale_type">Tipo de venta</label>
+                      <select  id="sale_type" class="browser-default material" ng-model="sale_type">
+                          <option ng-repeat="(k ,type) in sale_types" value="{{k}}">{{type}}</option>
+                      </select>
+                  </div>
+                  </div>          
+                  <div class="input-field col s12">
+                    <div class="col s10">
+                      <i class="mdi-action-add-shopping-cart prefix"></i>
+                      <input id="id_product" type="text" class="validate" ng-model="product_key" ng-keypress="checkKey($event , 'product');">
+                      <label for="id_product">Agregar código de producto</label>
+                    </div>
+                    <span class="col s1">                      
+                      <a href="#modal-product" class="modal-trigger" href="">
+                        <i class="mdi-action-search"></i>
+                      </a>                    
+                    </span>
+                  </div>          
+                  <div class="input-field col s12">
+                    <div class="col s10">
+                      <i class="mdi-action-add-shopping-cart prefix"></i>
+                      <input id="id_pack" type="text" class="validate" ng-model="pack_key" ng-keypress="checkKey($event , 'pack');">
+                      <label for="id_pack">Agregar código de paquete</label>
+                    </div>
+                    <span class="col s1">                      
+                      <a href="#modal-pack" class="modal-trigger" href="">
+                        <i class="mdi-action-search"></i>
+                      </a>                    
+                    </span>
+                  </div>
+                  <div class="input-field col s12">
+                    <div class="col s10">
+                      <i class="mdi-action-perm-identity prefix"></i>
+                      <input id="id_cliente" type="text" class="validate" ng-model="client_id" ng-keypress="checkKey($event , 'client');">
+                      <label for="id_cliente">Ingresar ID de cliente</label>
+                    </div>
+                    <span class="col s1">                      
+                      <a href="#modal-client" class="modal-trigger"  href="">
+                        <i class="mdi-action-search"></i>
+                      </a>                    
+                    </span>
+                    <span class="col s1">                      
+                      <a href="#modal-add-client" class="modal-trigger" href="">
+                        <i class="mdi-content-add"></i>
+                      </a>                    
+                    </span>
+                  </div>  
+                  <div class="col s12">
+                    <div class="col s10">  
+                          <label for="discount" class="">Agregar descuento</label>
+                          <select  id="discount"  class="browser-default material"  ng-model="discount" ng-change="addDiscount();">
+                              <option value=""></option>
+                              <option ng-repeat="(k , dis)  in discounts" value="{{k}}">{{dis.description}}</option>
+                          </select>
+                    </div>
+                  </div>                 
+                </form>             
+              </section>
+              <aside class="col l4 resume hide-on-med-and-down" ng-controller="resumeController">
+                <ul class="resume-list">
+                  <li class="resume-item">
+                    <h6 class="col l12"><i class="col l1 prefix mdi-action-perm-identity"></i><span class="col l4">Vendedor</span></h6>
+                    <p class="col l12 resume-item-detail"><span class="col l10">{{ seller.name }}</span><a href="#modal-login" class="modal-trigger col l1 right-align" href=""><i class="mdi-action-autorenew prefix"></i></a></p>
+                  </li>
+                  <li class="resume-item">
+                    <h6 class="col l12"><i class="col l1 prefix mdi-action-perm-identity"></i><span class="col l4">Cliente</span></h6>
+                    <p class="col l12 resume-item-detail"><span class="col l10">{{ $root.client.name }}</span><a class="col l1" href=""></a></p>
+                  </li>
+                  <li class="resume-item">
+                    <p class="col l12"><i class="col l1 prefix mdi-editor-attach-money"></i><span class="col l4">Subtotal</span><span class="col l4 offset-l2 right-align">{{ $root.subtotal | currency}}</span></p>
+                  </li>
+                  <li class="resume-item">
+                    <p class="col l12"><i class="col l1 prefix mdi-maps-local-shipping"></i><span class="col l4">Entrega</span><span class="col l4 offset-l2 right-align">{{ $root.delivery_cost | currency}}</span></p>
+                  </li>
+                  <li class="resume-item">
+                    <p class="col l12"><i class="col l1 prefix mdi-editor-attach-money"></i><span class="col l4">Descuento</span><span class="col l4 offset-l2 right-align">{{ $root.discount_description}}  - {{ $root.discount_amount | currency}}</span></p>
+                  </li>
+                  <li class="resume-item">
+                    <p class="col l12"><i class="col l1 prefix mdi-editor-attach-money"></i><span class="col l4">Total</span><span class="col l4 offset-l2 right-align">{{ $root.total | currency}}</span></p>
+                  </li>
+                </ul>
+              </aside>
+              <section class="col s12" ng-controller="tableProductsController">                
+                <table class="responsive-table striped table-products">
+                 <thead>
+                    <tr>
+                      <th data-field="id">Id</th>
+                      <th data-field="name">Nombre</th>
+                      <th data-field="key">Código</th>
+                      <th data-field="model">Modelo / Descripción</th>
+                      <th data-field="stock">En existencia</th>
+                      <th data-field="unity_price">Precio unitario</th>
+                      <th data-field="quantity">Cantidad</th>
+                      <th data-field="price">Precio</th>
+                      <th data-field="actions"></th>
+                      <th data-field="actions"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="(k , product) in $root.productsSelected"  >
+                      <td>{{ product.id }}</td>
+                      <td>{{ product.name }}</td>
+                      <td>{{ product.key }}</td>
+                      <td>{{ product.model }}</td>
+                      <td>{{ product.stock_in_stores[$root.store_id] }}</td>
+                      <td>{{ product.price | currency }}</td>
+                      <td>
+                            <input type="number" ng-model='product.quantity' min="1" max="{{ product.stock_in_stores[$root.store_id] }}" ng-change="calculateTotal(k)">
+                      </td>
+                      <td>{{ product.total | currency }}</td>
+                      <td>
+                        <a href="" ng-click="removeProduct(k , product)" ><i class="mdi-content-clear"></i></a>
+                      </td>
+                      <td ng-class="{ not_available : !checkAvailability(product) }">
+                        <i class="mdi-alert-error" ng-if="!checkAvailability(product)"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table> 
+              </section>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="modal-login" class="modal fixed-footer">
+      <form action="" id="form-login" class="form-modal">
+        <div class="modal-content">
+          <h5 class="col s8 offset-s2 center-align">Cambiar vendedor</h5>
+          <input-field>
+              <i class="mdi-action-account-box prefix"></i>
+              <input type="text" ng-model="login.username">
+              <label>Nombre de usuario</label>
+          </input-field>
+          <input-field>
+              <i class="mdi-action-lock prefix"></i>
+              <input type="password" ng-model="login.password">
+              <label>Contraseña</label>
+          </input-field>
+        </div>
+        <div class="modal-footer">
+          <input-field>
+            <button class="btn waves-effect waves-light" type="button" name="action">Enviar
+              <i class="mdi-content-send right"></i>
+            </button>
+          </input-field>
+        </div>
+      </form>
+    </div>
+    <div id="modal-product" class="modal fixed-footer" ng-controller="searchProductController">
+      <form action="" id="form-product" class="form-modal">
+        <div class="modal-content">
+          <h5 class="col s8 offset-s2 center-align">Buscar producto</h5>             
+          <div class="input-field">
+            <angucomplete-alt placeholder="Buscar por id, nombre, código o modelo" pause="100" selected-object="selectedProduct" title-field="name" minlength="1" input-class="" remote-url="http://localhost/vitem/public/POS/searchProducts?store_id={{store_id}}&find=" type="text" />
+          </div>          
+          <div class="" ng-show="selectedProduct">
+            <table class="responsive-table striped">
+              <thead>
+                <tr>
+                  <th data-field="id">Id</th>
+                  <th data-field="name">Nombre</th>
+                  <th data-field="price">Código</th>
+                  <th data-field="price">Modelo</th>
+                  <th data-field="price">Cantidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{selectedProduct.originalObject.id}}</td>
+                  <td>{{selectedProduct.originalObject.name}}</td>
+                  <td>{{selectedProduct.originalObject.key}}</td>
+                  <td>{{selectedProduct.originalObject.model}}</td>
+                  <td>{{selectedProduct.originalObject.stock_in_stores[store_id]}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input-field>
+            <button class="btn waves-effect waves-light" type="button" name="action" ng-click="addProduct();">Agregar
+              <i class="mdi-content-send right"></i>
+            </button>
+          </input-field>
+        </div>
+      </form>
+    </div>
+    <div id="modal-pack" class="modal fixed-footer" ng-controller="searchPackController">
+      <form action="" id="form-product" class="form-modal">
+        <div class="modal-content">
+          <h5 class="col s8 offset-s2 center-align">Buscar paquete</h5>             
+          <div>          
+            <angucomplete-alt placeholder="Buscar por id, nombre, código" pause="100" selected-object="selectedPack" title-field="name" minlength="1" input-class="" remote-url="{{ $root.WSUrl }}POS/searchPacks?store_id={{store_id}}&find=" type="text" />
+          </div>          
+          <div class="" ng-show="selectedPack">
+            <table class="striped">
+              <thead>
+                <tr>
+                  <th data-field="id">Id</th>
+                  <th data-field="name">Nombre</th>
+                  <th data-field="price">Código</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{selectedPack.originalObject.id}}</td>
+                  <td>{{selectedPack.originalObject.name}}</td>
+                  <td>{{selectedPack.originalObject.key}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input-field>
+            <button class="btn waves-effect waves-light" type="button" name="action" ng-click="addPack();">Agregar
+              <i class="mdi-content-send right"></i>
+            </button>
+          </input-field>
+        </div>
+      </form>
+    </div>
+
+    <div id="modal-client" class="modal fixed-footer" ng-controller="searchClientController">
+      <form action="" id="form-client" class="form-modal">
+        <div class="modal-content">
+          <h5 class="col s8 offset-s2 center-align">Buscar cliente</h5>                   
+          <div>         
+            <angucomplete-alt placeholder="Buscar por id, nombre o correo electrónico" pause="100" selected-object="selectedClient" title-field="name" minlength="1" input-class="" remote-url="{{ $root.WSUrl }}POS/searchClient?find=" type="text" />
+          </div>          
+          <div class="" ng-show="selectedClient">
+            <table class="striped">
+              <thead>
+                <tr>
+                  <th data-field="id">Id</th>
+                  <th data-field="name">Nombre</th>
+                  <th data-field="price">Correo electrónico</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{selectedClient.originalObject.id}}</td>
+                  <td>{{selectedClient.originalObject.name}}</td>
+                  <td>{{selectedClient.originalObject.email}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input-field>
+            <button class="btn waves-effect waves-light" type="button" name="action" ng-click="addClient();">Agregar
+              <i class="mdi-content-send right"></i>
+            </button>
+          </input-field>
+        </div>
+      </form>
+    </div>
+
+    <div id="modal-add-client" class="modal fixed-footer" >
+      <form action="" id="form-add-client" class="form-modal">
+        <div class="modal-content row">
+          <h5 class="col s8 offset-s2 center-align">Nuevo cliente</h5>  
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Nombre</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="email" ng-model="login.username">
+              <label>Correo electrónico</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>RFC</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Razón social</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Teléfono</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Calle</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Número exterior</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Número interior</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Código postal</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Colonia</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Delegación o municipio</label>
+          </input-field>
+
+          <input-field class="col s12 m6">
+              <input type="text" ng-model="login.username">
+              <label>Estado</label>
+          </input-field>
+
+        </div>
+        <div class="modal-footer">
+          <input-field>
+            <button class="btn waves-effect waves-light" type="button" name="action">Aceptar
+              <i class="mdi-content-send right"></i>
+            </button>
+          </input-field>
+        </div>
+      </form>
+    </div>
+
+    <div id="modal-add-delivery" class="modal fixed-footer" ng-controller="addDeliveryController">
+      <form action="" id="form-add-delivery" class="form-modal">
+        <div class="modal-content row">
+          <h5 class="col s8 offset-s2 center-align">Agregar entrega</h5>  
+
+          <input-field class="col s12 m6 offset-m6">
+              <i class="mdi-action-today prefix"></i>
+              <label for="inputCreated">Fecha de entrega</label>
+              <input input-date
+                          type="text"
+                          name="created"
+                          id="inputCreated"
+                          ng-model="currentTime"
+                          format="dd/mm/yyyy"
+                          months-full="{{ month }}"
+                          months-short="{{ monthShort }}"
+                          weekdays-full="{{ weekdaysFull }}"
+                          weekdays-short="{{ weekdaysShort }}"
+                          weekdays-letter="{{ weekdaysLetter }}"
+                          today="today"
+                          clear="clear"
+                          close="close"
+                          on-start="onStart()"
+                          on-render="onRender()"
+                          on-open="onOpen()"
+                          on-close="onClose()"
+                          on-set="onSet()"
+                          on-stop="onStop()"
+                          close-on-select = "true"
+                          close-on-clear = "true" />
+          </input-field>
+          <input-field class="col s12 m12">
+              <input type="email" ng-model="login.username">
+              <label>Dirección</label>
+          </input-field>
+
+          <div class="col s12 m12">         
+            <angucomplete-alt placeholder="Destino" pause="100" selected-object="selectedDestination" title-field="value_string,value_type" minlength="1" input-class="" remote-url="{{ $root.WSUrl }}POS/searchDestination?find=" type="text" /> 
+          </div>
+
+          <div class="" ng-show="selectedDestination">
+            <table class="striped">
+              <thead>
+                <tr>
+                  <th data-field="id">Id</th>
+                  <th data-field="name">Tipo</th>
+                  <th data-field="price">Valor</th>
+                  <th data-field="price">Costo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{selectedDestination.originalObject.id}}</td>
+                  <td>{{selectedDestination.originalObject.value_string}}</td>
+                  <td>{{selectedDestination.originalObject.value_type}}</td>
+                  <td>{{selectedDestination.originalObject.cost | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <input-field>
+            <button class="btn waves-effect waves-light" type="button" name="action" ng-click="addDelivery(); ">Agregar
+              <i class="mdi-content-send right"></i>
+            </button>
+          </input-field>
+        </div>
+      </form>
+    </div>
+
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/materialize/bin/materialize.js"></script>
+    <script src="bower_components/angular-materialize/src/angular-materialize.js"></script>
+    <script src="bower_components/angucomplete-alt/angucomplete-alt.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({app,.tmp}) scripts/main.js -->
+        <script src="scripts/main.js"></script>
+        <script src="scripts/pos.js"></script>
+        <script src="scripts/pos.controllers.js"></script>
+        <script src="scripts/pos.services.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
